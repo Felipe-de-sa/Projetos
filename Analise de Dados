@@ -1,0 +1,308 @@
+# A tabela de dados apresenta salários de diversos cargos na área de Informática desde 2020 até 2023
+# em diferentes países. A ideia é explorar a diversidade das remunerações em diferentes regiões,
+# empresas e cargos, gerando insights sobre as distribuições de salários
+
+# 1. work_year → ano_pago: ano no qual o salário foi pago
+
+# 2. experience_level → nivel_experiencia: detalhamento sobre a experiência dos cientistas de
+# dados durante o respectivo ano
+
+# • 'EN'= 'Júnior'
+# • 'MI' = 'Pleno'
+# • 'SE' = 'Senior'
+# • 'EX' = 'Especialista'
+
+# 3. employment_type → tipo_emprego: tipo de emprego durante o respectivo ano, como
+# trabalho em período integral, meio período ou contratual
+
+# • 'FT' = 'Período Integral'
+# • 'CT' = 'Contratual'
+# • 'PT' = 'Meio Período'
+# • 'FL' = 'FreeLancer'
+
+# 4. job_title → cargo_ocupado: cargo ocupado pelo profissional durante o ano registrado
+
+# 5. salary → salário: valor total do salário bruto pago a cada profissional de dados
+
+# 6. salary_currency → moeda_salario: moeda em que foi pago o salário
+
+# 7. salary_in_usd → salario_dolar: valor do salário pago convertido para dólar (USD)
+
+# 8. employee_residence → residencia_profissional: local de residência principal de cada
+# proffisional durante o respectivo ano de trabalho
+
+# 9. remote_ratio → trabalho_remoto: apresenta o percentual de trabalho feito remotamente
+
+# 10. company_location → localizacao_empresa: sigla do país onde está localizada a sede ou filial
+# contratante do empregador
+
+# 11. company_size → tamanho_empresa: porte da empresa durante o respectivo ano
+
+# • 'L' = 'Grande'
+# • 'S' = 'Pequena'
+# • 'M' = 'Média'
+
+# 12. country_employee → país_funcionário: nacionalidade do funcionário
+
+# Conexão com o drive
+from google.colab import drive
+drive.mount('/content/drive')
+
+# Importar bibliotecas
+import pandas as pd
+import numpy as np
+# Visualização de dados
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+import requests
+import re
+
+df = pd.read_csv('/content/drive/MyDrive/salários - salários.csv')
+
+print (df.shape)
+
+df.head (5)
+
+df.info ()
+
+df.describe()
+
+sorted(df.columns)
+
+  # **QUESTÃO (1)**
+  # Escolha uma ou mais colunas. Analise essa(s) coluna(s) e faça um código utilizando o desvio condicional composto. Apresente o que será avaliado dentro do contexto dos seus dados e analise seus resultados (1,0 ponto)
+
+# **Análise das colunas**
+
+## Foi utilizado o desvio condicional composto, para analisarmos os anos trabalhados, a coluna utilizada foi: 'work_year'. Assim, podemos ver a afirmação de que o ano trabalhado não foi 2020.
+
+
+
+
+ano_trabalhado = 2021
+
+ano_trabalhado in df['work_year']
+
+
+if ano_trabalhado != 2020:
+    print("O ano de trabalho não é 2020.")
+else:
+    print("O ano de trabalho é 2020.")
+
+ # **QUESTÃO (2)**
+  # Escolha uma ou mais colunas. Analise essa(s) coluna(s) e faça um código utilizando o desvio condicional encadeado. Apresente o que será avaliado dentro do contexto dos seus dados e analise seus resultados (1,5 ponto)
+
+
+# **Análise das colunas**
+
+## Vamos utilizar a variável work_year para fazer uma ocorrências de cada condição usando a função IF / ELIF / ELSE .
+
+## A análise feita com a coluna funcionários, e analisando o porte da empresa, com esta análise, pode-se observar que, entre os anos de 2020 e 2022, houve uma crescente de funcionários de 77 para 2025 funcionários registrados no banco de dados.
+
+
+# Inicialize os contadores
+count_ano_2020 = 0
+count_ano_2021 = 0
+count_ano_2022 = 0
+
+# Colocando a estrutura do desvio condicional encadeado
+for ano_trabalhado in df['work_year']:
+    if ano_trabalhado < 2021:
+        count_ano_2020 += 1
+    elif ano_trabalhado >= 2022 and ano_trabalhado < 2023:
+        count_ano_2021 += 1
+    else:
+      count_ano_2022 += 1
+
+# Imprima o número de ocorrências de cada condição
+print("Quantidade de funcionarios trabalhando em 2020:", count_ano_2020)
+print("Quantidade de funcionarios trabalhando em 2021:", count_ano_2021)
+print("Quantidade de funcionarios trabalhando em 2022:", count_ano_2022)
+
+ # **QUESTÃO (3)**
+  # Escolha uma ou mais colunas. Analise essa(s) coluna(s) e faça um código utilizando a estrutura de repetição FOR. Apresente o que será avaliado dentro do contexto dos seus dados e analise seus resultados (1,5 ponto)
+
+# **Análise das colunas**
+
+ ## Vamos utilizar a variável `salary` para fazer um loop com a função WHILE.
+## O objetivo principal da análise era descobrir a quantidade de Engenheiro de Analise de dados com salários de USD 140.000,00 Dolares, e foi descoberto 57 funcionarios no banco de dados
+
+
+salário_referencia = 140000
+funcionário_alvo = 'Analytics Engineer'
+moeda = "USD"
+
+# Exemplo de loop for para contar clientes com crédito acima do limite e estado civil específico
+contador_for = 0
+for indice, linha in df.iterrows():
+    if linha['salary'] > salário_referencia and linha['job_title'] == funcionário_alvo and linha['salary_currency'] == moeda:
+        contador_for += 1
+
+print("Número de funcionário com salarios acima de", salário_referencia, "e na função de", funcionário_alvo, "ganhando em",moeda,"(usando loop for):", contador_for)
+
+
+
+# **QUESTÃO (4)**
+
+#  Escolha uma ou mais colunas. Analise essa(s) coluna(s) e faça um código utilizando a estrutura de repetição WHILE. Apresente o que será avaliado dentro do contexto dos seus dados e analise seus resultados (1,5 ponto)
+
+# **Análise das colunas**
+
+
+
+
+
+ ## Vamos utilizar a variável `salary` para fazer um loop com a função WHILE.
+## Foi avaliado a quantidade de funcionários com salários acima de 140000USD, e forma mostrados 1784 funcionários, para saber a folha salarial.
+
+
+
+# Limite definido para verificar
+limite = 140000
+
+# Exemplo de loop WHILE para contar o número de valores acima do limite definido anteriormente
+
+# Estas linhas inicializam o contador e o índice que usaremos no loop WHILE.
+contador = 0
+indice = 0
+
+# Esta linha inicia um loop WHILE. Ele continuará enquanto o índice for menor que o comprimento da coluna salary do df
+while indice < len(df['salary']):
+    # Esta linha verifica se o valor na posição atual (dada pelo índice) da coluna salary é maior que o limite definido
+    # Se for, incrementa o contador em 1.
+    if df.loc[indice, 'salary'] > limite:
+        contador += 1
+    # Esta linha incrementa o índice em 1, para avançar para a próxima posição da coluna
+    indice += 1
+
+print("Número de valores acima de", limite, "(usando loop while):", contador)
+
+
+
+# **QUESTÃO (5)**
+
+# Escolha uma ou mais colunas. Analise essa(s) coluna(s) e faça um código utilizando uma função (lambda). Apresente o que será avaliado dentro do contexto dos seus dados e analise seus resultados
+
+# **Análise das colunas**
+
+## vamos analisar as colunas experience_level, employment_type e salary_in_usd utilizando uma função lambda. Faremos a análise para verificar a média salarial em dolar de acordo com os níveis de experiência e tipos de emprego.
+
+# Função para calcular média salarial em dolar usando a função lambda
+media_salarial = df.groupby(['experience_level', 'employment_type']).apply(lambda x: x['salary_in_usd'].mean()).reset_index()
+
+# Renomeando as colunas para português
+media_salarial.columns = ['nivel_experiencia', 'tipo_emprego', 'media_salarial_usd']
+
+# Exibindo os resultados
+print(media_salarial)
+
+# **Análise dos resultados**
+
+## Profissionais Plenos (MI) com empregos contratuais (CT) tendem a ganhar menos comparado aos profissionais sêniores.
+
+## Profissionais Sêniores (SE) em empregos de período integral (FT) têm salários significativamente mais altos, o que é esperado devido à maior experiência e responsabilidades associadas aos cargos mais elevados.
+
+# Essa análise, utilizando a função lambda, mostra como diferentes combinações de experiência e tipo de emprego afetam a média salarial. Isso pode ajudar empregadores e profissionais a entenderem melhor as dinâmicas salariais no setor de dados.
+
+# **QUESTÃO (6)**
+
+# Escolha uma ou mais colunas. Analise essa(s) coluna(s) e faça um código utilizando uma função (def). Apresente o que será avaliado dentro do contexto dos seus dados e analise seus resultados
+
+media_salarial = df.value_counts()
+print (media_salarial)
+
+# **Análise das Colunas**
+
+## **experience_level** (Nível de Experiência) Esta coluna indica o detalhamento sobre a experiência dos cientistas de dados durante o respectivo ano
+
+## EN = Júnior
+## MI = Pleno
+## SE = Sênior
+## EX = Especialista
+
+## **employment_type** (Tipo de Emprego) esta coluna indica o tipo de emprego durante o respectivo ano, como trabalho em período integral, meio período ou contratual
+
+## FT = Período Integral
+## CT = Contratual
+## PT = Meio Período
+## FL = FreeLancer
+
+## **salary_in_usd** (Salário em USD) Esta coluna representa o valor total do salário bruto pago a cada profissional, convertido para dólar americano (USD).
+
+# Conforme também analisado na questão anterior (questão (5)) vamos analisar as colunas usando a função (def) para descobrir a média salarial por nivel de experiência e tipo de emprego
+
+# Função para calcular média salarial em dolar por nível de experiência e tipo de emprego
+def calcular_media_salarial(df):
+    media_salarial = df.groupby(['experience_level', 'employment_type'])['salary_in_usd'].mean().reset_index()
+    media_salarial = media_salarial.rename(columns={
+        'experience_level': 'nivel_experiencia',
+        'employment_type': 'tipo_emprego',
+        'salary_in_usd': 'media_salarial_usd'
+    })
+    return media_salarial
+
+# exibição dos resultados
+resultado = calcular_media_salarial(df)
+print(resultado)
+
+# Análise dos resultados
+def analisar_resultados(resultado):
+    for index, row in resultado.iterrows():
+        nivel_experiencia = row['nivel_experiencia']
+        tipo_emprego = row['tipo_emprego']
+        media_salarial = row['media_salarial_usd']
+        print(f"Nível de Experiência: {nivel_experiencia}, Tipo de Emprego: {tipo_emprego}, Média Salarial (USD): {media_salarial:.2f}")
+
+analisar_resultados(resultado)
+
+
+# **Análise dos resultados**
+
+# Os resultados mostram que profissionais sêniores tendem a ter empregos de período integral e salários mais altos, enquanto profissionais plenos têm empregos contratuais com salários mais baixos. Esta análise é coerente com a expectativa de que níveis de experiência mais altos e tipos de emprego mais estáveis (como tempo integral) estão associados a salários mais altos.
+
+# **QUESTÃO (7)**
+
+# Calcule dois indicadores. Analise essas colunas e faça um código utilizando seus conhecimentos desde o início da disciplina. Apresente o que será avaliado dentro do contexto dos seus dados e analise seus resultados
+
+# **Análise das colunas**
+
+# Para calcular dois indicadores e analisar os dados fornecidos Vamos focar na análise dos salários e na proporção de trabalho remoto. Os indicadores que vamos calcular são:
+
+# Salário médio em dólar por nível de experiência e tipo de emprego
+# Proporção de cargos que são 100% remotos por país
+
+
+df.head()
+
+df.describe()
+
+# A tabela mostra a média dos salários para cada combinação de nível de experiência e tipo de emprego. Isso nos ajudará a entender como esses dois fatores juntos influenciam a média salarial.
+
+# Indicador 1: Calculamos a média salarial em dólar por nível de experiência e tipo de emprego
+media_salarial_experiencia_emprego = df.groupby(['experience_level', 'employment_type'])['salary_in_usd'].mean().reset_index()
+media_salarial_experiencia_emprego.columns = ['nivel_experiencia', 'tipo_emprego', 'salario_medio_usd']
+print(media_salarial_experiencia_emprego)
+
+
+ # Nesse indicador 2 vamos focar nos cargos e anos que os funcionarios entram na empresa
+
+# Indicador 2: Calculamos a média do ano de experiencia com o cargo ocupado e o ano de trabalho
+nivel_de_experiencia_cargo_ocupado = df.groupby(['experience_level', 'job_title'])['work_year'].mean().reset_index()
+nivel_de_experiencia_cargo_ocupado.columns = ['nivel_experiencia', 'cargo_ocupado', 'ano_de_trabalho']
+print(nivel_de_experiencia_cargo_ocupado)
+
+
+# **Análise dos resultados**
+
+# **Indicador 1 Média salarial em dólar por nível de experiência e tipo de emprego**
+
+# Este indicador nos ajuda a permitir observar as diferenças salariais considerando o nível de experiência e tipo de emprego.
+
+# Por exemplo, podemos analisar se cientistas de dados seniores em período integral tem uma média salarial maior comparado a cientistas de dados seniores em empregos contratados ou a níveis mais baixos de experiência em qualquer tipo de emprego.
+
+# Indicador 2: Calculamos a média do ano de experiencia com o cargo ocupado e o ano de trabalho
+
+# Podemos observar qual cargo o profissional ocupa e o ano de inicio na empresa
+
+# EX: 1,EN, AI Developer,2022.
